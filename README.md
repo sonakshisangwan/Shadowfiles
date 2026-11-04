@@ -1,4 +1,4 @@
-# Regex Detective / Shadowfiles 🕵️✨
+# Regex Detective / Shadowfiles 
 
 > **A full-stack cybercrime investigation game where code meets forensic pattern extraction.**  
 > Built with **Flask**, **Python `re`**, **OOP**, **Pandas**, **NumPy**, **Matplotlib**, and a cozy **pink & white** terminal interface.
@@ -43,7 +43,7 @@ The UI breaks away from generic dark cyberpunk templates, employing a **soft, co
 
 ---
 
-## 🕹️ 3. Core Gameplay & Scoring Mechanics
+##  3. Core Gameplay & Scoring Mechanics
 
 ### Mathematical Scoring Logic
 $$\text{Score} = (\text{Recall} \times 500) + (\text{Precision} \times 300) + \text{Brevity Bonus} - \text{Decoy Penalty} - \text{Attempt Penalty}$$
@@ -64,7 +64,7 @@ $$\text{Score} = (\text{Recall} \times 500) + (\text{Precision} \times 300) + \t
 
 ---
 
-## 🗂️ 4. Progression of the 8 Playable Cases
+##  4. Progression of the 8 Playable Cases
 
 | Case | Title | Regex / Tool Focus | Target Evidence | Culprit |
 |---|---|---|---|---|
@@ -75,11 +75,11 @@ $$\text{Score} = (\text{Recall} \times 500) + (\text{Precision} \times 300) + \t
 | **Case 05** | **Forensics Lab: Data Breach** | **Pandas** DataFrame | Rogue device telemetry (`DEV-[A-Z]{3}-\d{4}`) | `Karan Saxena` |
 | **Case 06** | **CCTV Surveillance Grid** | **NumPy** $8 \times 8$ Matrix | Thermal camera surge coordinates (`CAM-[A-H][1-8]`) | `Suresh Nair` |
 | **Case 07** | **Operation Redacted Shadow** | **`re.sub()`** De-masking | Unmasked secret project codes (`CODE-[A-Z]{4,5}-\d{2}`) | `Monica Dsouza` |
-| **Case 08** | **👑 Final Boss: Vedic Vault** | **Master Mixed Challenge** | Zero-hour time + Architect line + Treasury UPI + Vedic key | `Dr. Aryan Dev` |
+| **Case 08** | ** Final Boss: Vedic Vault** | **Master Mixed Challenge** | Zero-hour time + Architect line + Treasury UPI + Vedic key | `Dr. Aryan Dev` |
 
 ---
 
-## 📁 5. Project Directory Structure
+##  5. Project Directory Structure
 
 ```text
 regex_detective/
@@ -170,14 +170,14 @@ regex_detective/
 
 ---
 
-## 🎓 8. Viva & Presentation Guide
+##  8. Viva & Presentation Guide
 
 Use this section as a reference when presenting the project in class, vivas, or technical demonstrations.
 
-### 🎤 30-Second Elevator Pitch
+###  30-Second Elevator Pitch
 > *"Regex Detective is a gamified cybercrime forensic dashboard. Instead of dry theoretical regex exercises, students step into the shoes of a cyber detective solving 8 narrative cases. Using Flask, Python's `re` engine, Pandas, NumPy, and Matplotlib, players analyze intercepted chats, bank telemetry, and thermal grids. Overly broad patterns catch realistic decoys and penalize precision, while elegant patterns unlock stars, generate visual case analytics charts, and breach the final multi-chamber Vedic Vault."*
 
-### 🔑 Key Architectural Design Decisions
+###  Key Architectural Design Decisions
 1. **Why Python's `re` instead of client-side JavaScript regex?**
    - *Security & Engine Integrity*: Server-side validation guarantees consistent POSIX/Python regex behavior, prevents client manipulation of game state, and allows catching `re.error` to return custom in-game exceptions (`InvalidWarrantError`).
 2. **How does the scoring math prevent brute-force guessing?**
@@ -195,7 +195,7 @@ Use this section as a reference when presenting the project in class, vivas, or 
 5. **How does Matplotlib integrate into a web app safely?**
    - Matplotlib defaults to GUI backends (like Tkinter/Qt), which crash headless web servers. By explicitly invoking `matplotlib.use("Agg")`, charts are rendered directly into headless image buffers and closed with `plt.close(fig)` to eliminate memory leaks.
 
-### ❓ Sample Viva Questions & Quick Answers
+###  Sample Viva Questions & Quick Answers
 
 - **Q: What happens if a player types an invalid regular expression like `[0-9(`?**  
   *A:* The engine intercepts the syntax error through a `try...except re.error` block and raises our custom domain exception `InvalidWarrantError`. Instead of an HTTP 500 crash, the API returns HTTP 400 with the friendly message *"Invalid warrant! Regex error: unterminated character set"*.
