@@ -78,7 +78,15 @@ async function loadCase(caseId) {
 function renderCaseDetails(data) {
   elements.caseTitle.textContent = data.title;
   elements.caseDiff.textContent = data.difficulty;
-  elements.caseBriefing.textContent = data.briefing;
+  if (data.vault_status) {
+    const v = data.vault_status;
+    const chambersList = Object.entries(v.chambers)
+      .map(([name, ok]) => `  ${ok ? "🔓 [UNLOCKED]" : "🔒 [SEALED]"} ${name}`)
+      .join("\n");
+    elements.caseBriefing.textContent = `${data.briefing}\n\n👑 VEDIC VAULT CHAMBER SEALS: ${v.layers_unlocked}/${v.total_layers} Breached (${v.percentage}%)\n${chambersList}`;
+  } else {
+    elements.caseBriefing.textContent = data.briefing;
+  }
   elements.evidenceBox.textContent = data.evidence_text || "No evidence text found.";
 
   updateWarrantBudget(data.remaining_budget, data.search_budget);

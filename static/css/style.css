@@ -189,6 +189,25 @@ body {
   color: var(--primary-pink);
 }
 
+.case-tab-btn.boss-tab {
+  border-color: #f4d4aa;
+  background: #fffbf5;
+  color: #a86207;
+}
+
+.case-tab-btn.boss-tab:hover {
+  background: #fff5e6;
+  border-color: #e09214;
+  color: #8c4e00;
+}
+
+.case-tab-btn.boss-tab.active {
+  background: linear-gradient(135deg, #d85d7f 0%, #d87e35 100%);
+  border-color: #d87e35;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(216, 126, 53, 0.4);
+}
+
 /* Layout Grid */
 .dashboard-grid {
   display: grid;

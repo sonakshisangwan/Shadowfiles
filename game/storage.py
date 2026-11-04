@@ -102,8 +102,10 @@ class CaseManager:
         self.load_all_cases()
 
     def _normalize_id(self, case_id: str) -> str:
-        """Normalizes case id strings e.g. '1' -> 'case_01', 'case_1' -> 'case_01'."""
+        """Normalizes case id strings e.g. '1' -> 'case_01', 'vault' -> 'case_08'."""
         cid = str(case_id).strip().lower()
+        if cid in ("vault", "vedic", "vedic_vault", "boss", "finale"):
+            return "case_08"
         if cid.isdigit():
             return f"case_{int(cid):02d}"
         if cid.startswith("case_") and cid[5:].isdigit():

@@ -1,3 +1,4 @@
 timestamp,player_name,case_id,case_title,score,precision,recall,stars,status
 2026-11-04 22:39:00,Detective Priya,case_01,Operation Dark Rupee,650,1.0,1.0,3,SOLVED
 2026-11-04 22:44:28,Rookie Detective,case_01,Operation Dark Rupee,200,1.0,1.0,3,SOLVED
+2026-11-04 22:48:48,Rookie Detective,case_08,Final Boss: Vedic Vault,500,1.0,1.0,3,MASTER_SOLVED

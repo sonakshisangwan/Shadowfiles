@@ -60,6 +60,24 @@ def get_case(case_id: str):
     evidence_preview = case.evidence.preview(250) if case.evidence else ""
     evidence_text = case.evidence.content if case.evidence else ""
 
+    vault_status = None
+    if case.case_id == "case_08":
+        collected = set(player.get_collected_clues(case.case_id))
+        unlocked = {
+            "Chamber 1 (Zero-Hour Timestamp)": "2026-11-04 23:59" in collected,
+            "Chamber 2 (Architect Secure Line)": "+91-98777-12345" in collected,
+            "Chamber 3 (Syndicate Treasury UPI)": "cryptic.master@okhdfcbank" in collected,
+            "Chamber 4 (Master Vedic Lock Key)": "VAULT-OM-108" in collected,
+        }
+        broken = sum(1 for v in unlocked.values() if v)
+        vault_status = {
+            "layers_unlocked": broken,
+            "total_layers": 4,
+            "percentage": int((broken / 4) * 100),
+            "vault_open": broken == 4,
+            "chambers": unlocked,
+        }
+
     return jsonify({
         "success": True,
         "case_id": case.case_id,
@@ -77,6 +95,7 @@ def get_case(case_id: str):
         "status": player.get_case_status(case.case_id),
         "player_reputation": player.reputation,
         "player_coins": player.coins,
+        "vault_status": vault_status,
     }), 200
 
 
@@ -207,12 +226,14 @@ def accuse():
         }), 400
 
     is_correct = suspect.lower() == case.culprit.lower()
+    is_vault = case.case_id == "case_08"
 
     if is_correct:
         player.mark_solved(case.case_id)
-        player.reward_reputation(20)
-        player.coins += 25
-        player.score += 200
+        player.reward_reputation(30 if is_vault else 20)
+        player.coins += 50 if is_vault else 25
+        bonus_points = 500 if is_vault else 200
+        player.score += bonus_points
 
         # Record to CSV Leaderboard
         record_leaderboard_entry(
@@ -223,11 +244,17 @@ def accuse():
             precision=1.0,
             recall=1.0,
             stars=3,
-            status="SOLVED",
+            status="MASTER_SOLVED" if is_vault else "SOLVED",
         )
 
         status = "solved"
-        message = f"Case Solved! {case.culprit} has been arrested and confessed."
+        if is_vault:
+            message = (
+                f"👑 VEDIC VAULT BREACHED! Mastermind {case.culprit} apprehended! "
+                "The Apex Cybercrime Syndicate has fallen. You are now a Master Cybercrime Detective!"
+            )
+        else:
+            message = f"Case Solved! {case.culprit} has been arrested and confessed."
     else:
         player.penalize_reputation(20)
         if player.reputation <= 0:

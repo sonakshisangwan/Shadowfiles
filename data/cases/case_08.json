@@ -1,0 +1,31 @@
+{
+  "case_id": "case_08",
+  "title": "Final Boss: Vedic Vault",
+  "briefing": "The Apex Cybercrime Syndicate has locked their final treasury inside the Vedic Vault. To crack the master lock, combine all your investigative regex skills: extract the zero-hour breach timestamp, trace the Architect's encrypted phone line, uncover the treasury UPI handle, and de-mask the root key VAULT-OM-108. Beware of multi-layered decoys and unmask the mastermind to bring justice!",
+  "difficulty": "Master / Finale",
+  "search_budget": 6,
+  "remaining_budget": 6,
+  "searches_used": 0,
+  "evidence_name": "Vedic Vault Zero-Day Dossier",
+  "evidence_text": "================================================================================\n  CLASSIFIED LEVEL-9 DOSSIER: VEDIC VAULT // ZERO-DAY PROTOCOL\n  CENTRAL CYBERCRIME BUREAU \u2022 APEX INTELLIGENCE ARCHIVE\n================================================================================\n\n--- [CHAMBER 1: PERIMETER GATEWAY & ZERO-HOUR BREACH LOGS] ---\n[2026-11-04 12:00] Perimeter Gateway Test Ping: Decoy ping acknowledged (Decoy).\n[2026-11-04 22:40] Surveillance confirms outer security barrier arm engaged.\n[2026-11-04 23:59] ZERO-HOUR ANOMALY: Mainframe root override at 2026-11-04 23:59.\n[2026-11-05 00:01] System timestamp verified by quantum atomic clock sync.\n\n--- [CHAMBER 2: HAWALA & WIRE COMMUNICATIONS TRANSCRIPT] ---\n[TRANSCRIPT] Inbound encrypted satellite voice call routed to +91-98777-12345.\n[TRANSCRIPT] Caller voiceprint matches mastermind: Dr. Aryan Dev (The Architect).\n[DECOY-SMS] Inactive decoy SIM pinged: +91-00000-00000 (Burner discarded).\n[UPI-WIRE] 5,000,000 INR extortion payout routed to: cryptic.master@okhdfcbank.\n[UPI-DECOY] Benign test handle flagged by router: test.dummy@fakeupi (IGNORED).\n\n--- [CHAMBER 3: PANDAS TELEMETRY & NUMPY SENSOR COALESCENCE] ---\n[FORENSICS] Rogue node DEV-ARC-8899 synchronized terminal telemetry.\n[NUMPY MATRIX] CCTV grid sensor CAM-V9 registered critical 98.6C thermal overload.\n[RADAR] High-gain receiver detected encrypted transponder signal near Connaught Place.\n\n--- [CHAMBER 4: ENCRYPTED VEDIC CIPHER & RE.SUB REDACTION CORE] ---\nThe root vault lock is shielded by Vedic cipher masking. Redaction tokens are wrapped\nin triple hashes '###...###'. Use regex and re.sub() unmasking to extract the master key.\n\nLOCK CORE RECOVERY BLOCK:\n  Noise Packet Alpha: ###DECOY-DUMMY-000### [REDACTED FIREWALL NOISE]\n  Noise Packet Beta:  ###VAULT-99### [MALFORMED INCOMPLETE KEY]\n  GENUINE VAULT MASTER KEY: ###VAULT-OM-108### [FLAGGED LEVEL-9 MASTER CIPHER]\n\n================================================================================\nINVESTIGATION SUMMARY:\nExtract the four master clues to shatter the syndicate:\n  1. Zero-hour breach timestamp matching: 2026-11-04 23:\\d{2}\n  2. Mastermind priority line: \\+91-98\\d{3}-\\d{5}\n  3. Syndicate treasury UPI: \\w+\\.\\w+@okhdfcbank\n  4. Master Vedic Vault key: VAULT-[A-Z]{2}-\\d{3}\n\nFINAL TARGET: Identify and indict the master architect behind the entire conspiracy.\n================================================================================\n",
+  "expected_clues": [
+    "+91-98777-12345",
+    "2026-11-04 23:59",
+    "VAULT-OM-108",
+    "cryptic.master@okhdfcbank"
+  ],
+  "decoys": [
+    "###DECOY-DUMMY-000###",
+    "+91-00000-00000",
+    "2026-11-04 12:00",
+    "VAULT-99",
+    "test.dummy@fakeupi"
+  ],
+  "suspects": [
+    "Dr. Aryan Dev (The Architect)",
+    "Vikram Malhotra (Hawala Broker)",
+    "Monica Dsouza (Cipher Operative)",
+    "Karan Saxena (Forensic Infiltrator)"
+  ],
+  "culprit": "Dr. Aryan Dev (The Architect)"
+}

@@ -29,6 +29,7 @@ from game.storage import (
     record_leaderboard_entry,
     save_player_pickle,
 )
+from game.vault import VedicVaultCase, create_vedic_vault_case
 
 __all__ = [
     "Evidence",
@@ -59,4 +60,6 @@ __all__ = [
     "generate_forensics_evidence_text",
     "generate_cctv_evidence_text",
     "unmask_redactions",
+    "VedicVaultCase",
+    "create_vedic_vault_case",
 ]
