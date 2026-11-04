@@ -1,0 +1,26 @@
+{
+  "case_id": "case_05",
+  "title": "Forensics Lab: Data Breach",
+  "briefing": "Cyber forensics extracted raw device telemetry from compromised banking terminals using Pandas. Identify rogue device IDs matching format DEV-[A-Z]{3}-\\d{4} involved in unauthorized EXFIL actions. Filter out benign SYS- servers and malformed device tags.",
+  "difficulty": "Intermediate",
+  "search_budget": 4,
+  "evidence_name": "Banking Terminal Telemetry (Pandas)",
+  "evidence_text": "=== CYBER FORENSICS LAB: TABULAR TERMINAL TELEMETRY (PANDAS ENGINE) ===\nTotal Log Records: 8 | Anomalous Flagged: 2\nAction Distribution: {'HEARTBEAT': 2, 'SESSION_CLOSE': 2, 'EXFIL_DATA': 1, 'PING': 1, 'UNAUTH_DUMP': 1, 'TEST_ECHO': 1}\n========================================================================\n          timestamp    device_id    ip_address        action  status     operator\n2026-11-04 14:02:11 SYS-SRV-1001     10.0.1.10     HEARTBEAT SUCCESS SystemDaemon\n2026-11-04 14:05:44 DEV-ROK-9921 192.168.1.105    EXFIL_DATA FLAGGED Karan Saxena\n2026-11-04 14:12:30      DEV-999 192.168.1.200          PING DROPPED      Unknown\n2026-11-04 14:18:02 DEV-SHD-4102     10.0.4.55   UNAUTH_DUMP FLAGGED Karan Saxena\n2026-11-04 14:25:51 SYS-SRV-1002     10.0.1.12     HEARTBEAT SUCCESS SystemDaemon\n2026-11-04 14:31:10  DEV-TEST-01     127.0.0.1     TEST_ECHO IGNORED       Tester\n2026-11-04 14:40:00 DEV-ROK-9921 192.168.1.105 SESSION_CLOSE SUCCESS Karan Saxena\n2026-11-04 14:55:18 DEV-SHD-4102     10.0.4.55 SESSION_CLOSE SUCCESS Karan Saxena\n========================================================================\nFORENSIC ANALYST NOTE:\nOnly devices following the rogue pattern 'DEV-[A-Z]{3}-\\d{4}' with FLAGGED\nexfiltration status belong to the perpetrator. Ignore internal 'SYS-' nodes\nand malformed device tags like DEV-999 or DEV-TEST-01.\nCompromised audit logs tie rogue device activity directly to operator: Karan Saxena.\n",
+  "expected_clues": [
+    "DEV-ROK-9921",
+    "DEV-SHD-4102"
+  ],
+  "decoys": [
+    "SYS-SRV-1001",
+    "DEV-999",
+    "SYS-SRV-1002",
+    "DEV-TEST-01"
+  ],
+  "suspects": [
+    "Karan Saxena",
+    "Megha Kapoor",
+    "Tanya Sen",
+    "Varun Ahuja"
+  ],
+  "culprit": "Karan Saxena"
+}

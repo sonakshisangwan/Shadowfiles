@@ -1,0 +1,25 @@
+{
+  "case_id": "case_07",
+  "title": "Operation Redacted Shadow",
+  "briefing": "An encrypted transmission recovered from an illegal darknet relay contains heavily redacted intelligence. Secret project codes are disguised with redaction noise like '###CODE-[A-Z]{4,5}-\\d{2}###'. Extract the genuine secret codes CODE-[A-Z]{4,5}-\\d{2} or strip the redaction noise using re.sub() to reveal the operative's authorization tokens.",
+  "difficulty": "Advanced",
+  "search_budget": 4,
+  "evidence_name": "Intercepted Redacted Memo",
+  "evidence_text": "=== INTERCEPTED REDACTED MEMO ===\nDOCUMENT ID: #SHADOW-88219-TOP-SECRET\nORIGIN: Darknet Relays [Filtered via re.sub masking protocol]\n\nMEMO BODY:\nTarget asset extraction confirmed for operative 'Monica Dsouza'.\nPrimary authorization code: ###CODE-ALPHA-42### [FLAGGED LEVEL 5]\nBackup deployment protocol: ###CODE-VIPER-88### [FLAGGED LEVEL 5]\nDecoy dummy noise inserted by firewall: ###DECOY-DUMMY-00###\nInvalid fragment dropped: ###CODE-99###\nSecondary decoy buffer: ###CODE-TOOLONG-1234###\n\nCONFIDENTIAL: Operative 'Monica Dsouza' authorized execution of CODE-ALPHA-42 at checkpoint.\n",
+  "expected_clues": [
+    "CODE-ALPHA-42",
+    "CODE-VIPER-88"
+  ],
+  "decoys": [
+    "DECOY-DUMMY-00",
+    "CODE-99",
+    "CODE-TOOLONG-1234"
+  ],
+  "suspects": [
+    "Monica Dsouza",
+    "Sameer Sen",
+    "Preeti Jain",
+    "Arjun Reddy"
+  ],
+  "culprit": "Monica Dsouza"
+}

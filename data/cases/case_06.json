@@ -1,0 +1,27 @@
+{
+  "case_id": "case_06",
+  "title": "CCTV Surveillance Grid",
+  "briefing": "Security cameras in the jewelry district capture heat signatures across an 8x8 NumPy matrix grid. Extract the camera sensor coordinate identifiers matching CAM-[A-H][1-8] where suspicious thermal surges (>85C) occurred. Decoy low-temperature sensors must be ignored.",
+  "difficulty": "Advanced",
+  "search_budget": 4,
+  "evidence_name": "Thermal Surveillance Grid (NumPy)",
+  "evidence_text": "=== CCTV SURVEILLANCE MATRIX: 8x8 THERMAL HEAT GRID (NUMPY ENGINE) ===\nMatrix Shape: (8, 8) | Sensors: 64 | Mean Temp: 25.9C | Peak Surge: 94.1C\nThreshold Alert Level: High (>85.0C indicates active physical intrusion)\n------------------------------------------------------------------------\n[Row A] CAM-A1: 23.9C | CAM-A2: 22.2C | CAM-A3: 24.3C | CAM-A4: 92.4C [HOT]\n        CAM-A5: 20.5C | CAM-A6: 24.9C | CAM-A7: 23.8C | CAM-A8: 23.9C\n[Row B] CAM-B1: 20.6C | CAM-B2: 88.7C [HOT] | CAM-B3: 21.9C | CAM-B4: 24.6C\n        CAM-B5: 23.2C | CAM-B6: 24.1C | CAM-B7: 22.2C | CAM-B8: 21.1C\n[Row C] CAM-C1: 22.8C | CAM-C2: 20.3C | CAM-C3: 24.1C | CAM-C4: 23.2C\n        CAM-C5: 23.8C | CAM-C6: 21.8C | CAM-C7: 24.9C | CAM-C8: 24.5C\n[Row D] CAM-D1: 23.9C | CAM-D2: 21.0C | CAM-D3: 94.1C [HOT] | CAM-D4: 20.2C\n        CAM-D5: 20.8C | CAM-D6: 23.4C | CAM-D7: 23.7C | CAM-D8: 24.8C\n[Row E] CAM-E1: 21.6C | CAM-E2: 21.9C | CAM-E3: 22.3C | CAM-E4: 20.9C\n        CAM-E5: 20.6C | CAM-E6: 22.4C | CAM-E7: 21.1C | CAM-E8: 23.3C\n[Row F] CAM-F1: 22.2C | CAM-F2: 24.2C | CAM-F3: 23.5C | CAM-F4: 21.6C\n        CAM-F5: 24.2C | CAM-F6: 24.0C | CAM-F7: 21.9C | CAM-F8: 21.4C\n[Row G] CAM-G1: 23.4C | CAM-G2: 20.7C | CAM-G3: 21.0C | CAM-G4: 20.0C\n        CAM-G5: 23.9C | CAM-G6: 23.3C | CAM-G7: 23.5C | CAM-G8: 23.9C\n[Row H] CAM-H1: 22.3C | CAM-H2: 22.8C | CAM-H3: 20.7C | CAM-H4: 20.6C\n        CAM-H5: 23.3C | CAM-H6: 22.4C | CAM-H7: 22.8C | CAM-H8: 23.8C\n------------------------------------------------------------------------\nCCTV OPERATOR LOG:\nIntrusion alarm detected heat surges across 3 distinct matrix coordinates.\nExtract coordinates matching 'CAM-[A-H][1-8]' where temperature exceeds 85C.\nFacial recognition at CAM-A4 and CAM-D3 matched suspect 'Suresh Nair'.\n",
+  "expected_clues": [
+    "CAM-A4",
+    "CAM-B2",
+    "CAM-D3"
+  ],
+  "decoys": [
+    "CAM-A1",
+    "CAM-B1",
+    "CAM-C1",
+    "CAM-D1"
+  ],
+  "suspects": [
+    "Suresh Nair",
+    "Farhan Akhtar",
+    "Bina Das",
+    "Ritika Roy"
+  ],
+  "culprit": "Suresh Nair"
+}
