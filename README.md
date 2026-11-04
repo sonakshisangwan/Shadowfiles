@@ -11,7 +11,7 @@ In **Regex Detective / Shadowfiles**, the player acts as a rookie cybercrime inv
 
 Each case presents **messy digital evidence** such as server wiretaps, phone records, CCTV heat matrices, payment gateways, and encrypted ciphers. The player writes **regular expressions** to extract authentic clues, filter out deceptive decoys, manage limited warrant budgets, and apprehend the mastermind.
 
-### Visual Aesthetic
+## Visual Aesthetic
 The UI breaks away from generic dark cyberpunk templates, employing a **soft, cozy, handmade aesthetic** with:
 - Warm blush pink (`#d85d7f`) and cream white (`#ffffff`) palette
 - Delicate rounded cards and soft drop shadows
@@ -113,7 +113,7 @@ regex_detective/
 
 ---
 
-## 🚀 6. Local Setup & Quickstart
+##  6. Local Setup & Quickstart
 
 ### Prerequisites
 - Python 3.10+ (tested on Python 3.14)
