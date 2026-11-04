@@ -3,291 +3,659 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regex Detective 🕵️ | Cybercrime Bureau</title>
+  <title>Regex Detective // Shadowfiles - Cybercrime Puzzle Game</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-  <div class="container">
-    
-    <!-- Top Header -->
-    <header class="top-header">
-      <div class="brand-wrapper">
-        <div class="brand-icon">🕵️</div>
-        <div class="brand-titles">
-          <h1>Regex Detective</h1>
-          <p>Cybercrime Bureau • Shadowfiles Division</p>
+<body class="crt-enabled">
+
+  <!-- Scanline & Vignette Overlay for Cyberpunk Detective Atmosphere -->
+  <div class="crt-overlay" id="crtOverlay" aria-hidden="true"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. START SCREEN / CINEMATIC LAUNCHER                                      -->
+  <!-- ========================================================================= -->
+  <section class="screen-view active" id="startScreen">
+    <div class="start-container">
+      
+      <!-- Top Bureau Bar -->
+      <div class="bureau-bar">
+        <span class="classification-tag">CLASSIFIED // LEVEL 5 SECURITY CLEARANCE</span>
+        <div class="audio-toggle-wrapper">
+          <button id="startAudioToggleBtn" class="game-btn btn-ghost" title="Toggle Sound FX">
+            <span class="icon">🔊</span> <span id="startAudioStatusText">SFX: ON</span>
+          </button>
         </div>
       </div>
 
-      <div class="stats-bar">
-        <div class="stat-chip">
-          <span class="chip-label">Reputation:</span>
-          <span class="chip-val" id="playerReputation">100%</span>
+      <!-- Main Hero Header -->
+      <div class="start-hero">
+        <div class="cyber-badge-logo">
+          <div class="radar-sweep"></div>
+          <span class="badge-icon">🕵️</span>
         </div>
-        <div class="stat-chip">
-          <span class="chip-label">Total Score:</span>
-          <span class="chip-val" id="playerScore">0 pts</span>
+        <h1 class="glitch-title" data-text="REGEX DETECTIVE">REGEX DETECTIVE</h1>
+        <div class="subtitle-tagline">SHADOWFILES // CYBERCRIME FORENSIC OPERATIONS</div>
+        <p class="hero-description">
+          An elusive financial cyber-syndicate is siphoning illicit capital across encrypted networks. 
+          As the lead cybercrime inspector, harness the power of regular expressions to penetrate wiretaps, 
+          reconstruct timelines, decrypt ciphertexts, and breach the legendary <strong>Vedic Vault</strong>.
+        </p>
+      </div>
+
+      <!-- Career Dossier Card -->
+      <div class="dossier-card">
+        <div class="dossier-header">
+          <div class="dossier-avatar">🔍</div>
+          <div class="dossier-meta">
+            <h2 id="startPlayerName">Inspector Detective</h2>
+            <span class="rank-tag" id="startPlayerRank">Cyber Forensics Inspector</span>
+          </div>
+          <div class="dossier-status-pill">ACTIVE INVESTIGATOR</div>
         </div>
-        <button id="saveBtn" class="btn-secondary" title="Save game session (Pickle)">
-          💾 Save
+
+        <div class="dossier-stats-grid">
+          <div class="dossier-stat-tile">
+            <span class="tile-label">Career Score</span>
+            <span class="tile-val" id="startTotalScore">0</span>
+            <span class="tile-sub">points earned</span>
+          </div>
+          <div class="dossier-stat-tile">
+            <span class="tile-label">Reputation</span>
+            <span class="tile-val" id="startReputation">100%</span>
+            <div class="mini-health-bar">
+              <div class="mini-health-fill" id="startReputationBar" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="dossier-stat-tile">
+            <span class="tile-label">Bureau Coins</span>
+            <span class="tile-val" id="startCoins">🪙 50</span>
+            <span class="tile-sub">warrant tokens</span>
+          </div>
+          <div class="dossier-stat-tile">
+            <span class="tile-label">Missions Solved</span>
+            <span class="tile-val" id="startSolvedCount">0 / 8</span>
+            <span class="tile-sub" id="startClearedRatio">0% Cleared</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Actions -->
+      <div class="start-actions-row">
+        <button id="startGameBtn" class="game-btn btn-primary pulse-action">
+          <span class="icon">⚡</span>
+          <span>START INVESTIGATION</span>
         </button>
-        <button id="loadBtn" class="btn-secondary" title="Restore game session (Pickle)">
-          📂 Load
+        <button id="openMapBtn" class="game-btn btn-secondary">
+          <span class="icon">🗺️</span>
+          <span>MISSION MAP</span>
         </button>
-        <button id="resetBtn" class="btn-secondary" title="Reset search budget for this case">
-          ↻ Reset Case
+        <button id="openLeaderboardBtn" class="game-btn btn-secondary">
+          <span class="icon">🏆</span>
+          <span>LEADERBOARD</span>
+        </button>
+        <button id="startLoadBtn" class="game-btn btn-outline" title="Restore game save via Pickle">
+          <span class="icon">📂</span>
+          <span>RESTORE DOSSIER</span>
         </button>
       </div>
+
+      <!-- System Telemetry Footer -->
+      <footer class="start-footer">
+        <span>PYTHON 3.14 BACKEND</span> • 
+        <span>REGEX FINDFALL ENGINE</span> • 
+        <span>MATPLOTLIB ANALYTICS</span> • 
+        <span>PICKLE PERSISTENCE</span>
+      </footer>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================================= -->
+  <!-- 2. MISSION / CASE MAP SCREEN                                              -->
+  <!-- ========================================================================= -->
+  <section class="screen-view" id="mapScreen">
+    <div class="map-container">
+      
+      <!-- Mission Map Header -->
+      <header class="screen-header">
+        <div class="header-left">
+          <button id="mapBackToStartBtn" class="game-btn btn-ghost">
+            <span>◄ Start Screen</span>
+          </button>
+          <div class="screen-title-group">
+            <h2>CYBERCRIME CRIME SCENE SELECTOR</h2>
+            <p>Select an active operation node to deploy forensic warrants</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="mode-toggle-group">
+            <span class="toggle-label">Mode:</span>
+            <button id="toggleSandboxBtn" class="game-btn btn-small" title="Toggle progressive unlock vs sandbox">
+              <span id="sandboxStatusText">Progression: Story</span>
+            </button>
+          </div>
+          <button id="mapResumeBtn" class="game-btn btn-primary">
+            <span>Resume Current Case ►</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Mission Progress Bar -->
+      <div class="map-progress-panel">
+        <div class="progress-info">
+          <span class="progress-title">BUREAU SYNDICATE CLEARANCE PROGRESS</span>
+          <span class="progress-stats" id="mapProgressLabel">0 / 8 Operations Concluded (0%)</span>
+        </div>
+        <div class="game-progress-bar">
+          <div class="progress-fill" id="mapProgressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Case Cards Grid -->
+      <div class="mission-grid" id="missionCardsGrid">
+        <!-- Dynamically rendered via JS -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================================= -->
+  <!-- 3. ACTIVE CASE INVESTIGATION SCREEN                                       -->
+  <!-- ========================================================================= -->
+  <section class="screen-view" id="gameScreen">
+    
+    <!-- Top Persistent Game HUD -->
+    <header class="game-hud" id="gameHud">
+      
+      <!-- Left HUD: Navigation & Case Node -->
+      <div class="hud-left">
+        <button id="hudBackToMapBtn" class="game-btn btn-icon-text" title="Return to Mission Map">
+          <span class="icon">🗺️</span> <span>MAP</span>
+        </button>
+        <div class="hud-case-pill">
+          <span class="case-badge" id="hudCaseId">CASE 01</span>
+          <span class="case-label" id="hudCaseTitle">Operation Dark Rupee</span>
+        </div>
+      </div>
+
+      <!-- Center HUD: Energy & Reputation Bars -->
+      <div class="hud-center">
+        <!-- Energy Battery (Search Budget) -->
+        <div class="hud-energy-meter" title="Warrant Search Energy Remaining">
+          <div class="meter-meta">
+            <span class="meter-title">WARRANT ENERGY</span>
+            <span class="meter-count" id="hudWarrantCount">4 / 4</span>
+          </div>
+          <div class="energy-cells" id="hudEnergyCells">
+            <!-- Dynamic Glowing Battery Cells -->
+          </div>
+        </div>
+
+        <!-- Detective Reputation Health Bar -->
+        <div class="hud-reputation-meter" title="Detective Bureau Standing (Wrong Accusations Penalize -20 HP)">
+          <div class="meter-meta">
+            <span class="meter-title">REPUTATION HP</span>
+            <span class="meter-count" id="hudReputationCount">100%</span>
+          </div>
+          <div class="health-bar-container">
+            <div class="health-bar-fill" id="hudReputationFill" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right HUD: Currency, Score & Actions -->
+      <div class="hud-right">
+        <div class="hud-stat-badge" title="Bureau Coins">
+          <span class="stat-icon">🪙</span>
+          <span class="stat-value" id="hudCoins">50</span>
+        </div>
+
+        <div class="hud-stat-badge" title="Total Case Score">
+          <span class="stat-icon">⭐</span>
+          <span class="stat-value" id="hudScore">0</span>
+        </div>
+
+        <div class="hud-actions">
+          <button id="hudSaveBtn" class="game-btn btn-icon" title="Save Game Session (Pickle)">
+            <span>💾</span>
+          </button>
+          <button id="hudLoadBtn" class="game-btn btn-icon" title="Load Game Session (Pickle)">
+            <span>📂</span>
+          </button>
+          <button id="hudResetBtn" class="game-btn btn-icon" title="Reset Current Case Budget">
+            <span>↻</span>
+          </button>
+          <button id="hudAudioToggleBtn" class="game-btn btn-icon" title="Toggle Sound FX">
+            <span id="hudAudioIcon">🔊</span>
+          </button>
+          <button id="hudCrtToggleBtn" class="game-btn btn-icon" title="Toggle CRT Scanline Effect">
+            <span>📺</span>
+          </button>
+        </div>
+      </div>
+
     </header>
 
-    <!-- Case Navigation Tabs -->
-    <nav class="case-tabs-nav" aria-label="Investigation Cases">
-      <button class="case-tab-btn active" data-case-id="case_01">
-        <span>📁 Case 01: Dark Rupee</span>
-        <span class="badge-diff">Beginner</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_02">
-        <span>📞 Case 02: Hawala Wire</span>
-        <span class="badge-diff">Intermediate</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_03">
-        <span>💳 Case 03: UPI Syndicate</span>
-        <span class="badge-diff">Intermediate</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_04">
-        <span>⏰ Case 04: Midnight Alibi</span>
-        <span class="badge-diff">Timeline</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_05">
-        <span>📊 Case 05: Forensics Lab</span>
-        <span class="badge-diff">Pandas</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_06">
-        <span>📹 Case 06: CCTV Grid</span>
-        <span class="badge-diff">NumPy</span>
-      </button>
-      <button class="case-tab-btn" data-case-id="case_07">
-        <span>🔐 Case 07: Redacted Cipher</span>
-        <span class="badge-diff">re.sub</span>
-      </button>
-      <button class="case-tab-btn boss-tab" data-case-id="case_08">
-        <span>👑 Case 08: Vedic Vault</span>
-        <span class="badge-diff">Final Boss</span>
-      </button>
-    </nav>
-
-    <!-- Main Dashboard Grid -->
-    <main class="dashboard-grid">
+    <!-- Main Investigation Stage (2-Column Command Deck) -->
+    <main class="investigation-stage">
       
-      <!-- Left Column: Briefing, Warrants & Clues -->
-      <section class="left-col">
+      <!-- ===================================================================== -->
+      <!-- LEFT COLUMN: Briefing, Vedic Vault Matrix, Regex Terminal, Clue Tray   -->
+      <!-- ===================================================================== -->
+      <div class="stage-col stage-col-left">
         
-        <!-- Case Briefing Card -->
-        <article class="card briefing-card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">📋</span>
-              <span id="caseTitle">Loading case...</span>
+        <!-- Case Briefing & Objective Dossier -->
+        <article class="game-panel briefing-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">📋</span>
+              <span id="panelCaseTitle">Case Briefing</span>
             </div>
-            <span class="stat-chip">
-              <span class="chip-label">Level:</span>
-              <span class="chip-val" id="caseDiff">Beginner</span>
-            </span>
+            <div class="panel-tags">
+              <span class="tag-difficulty" id="panelCaseDiff">Beginner</span>
+              <span class="tag-status" id="panelCaseStatus">IN PROGRESS</span>
+            </div>
           </div>
-          <p class="case-story" id="caseBriefing">
-            Fetching classified case briefing from archives...
-          </p>
 
-          <!-- Warrant Budget Meter -->
-          <div class="warrant-meter">
-            <span class="meter-label">Warrant Budget</span>
-            <div class="warrant-dots" id="warrantDots"></div>
-            <span class="meter-label" id="warrantText">4 / 4 warrants left</span>
+          <!-- Dynamic Vedic Vault Chamber Matrix (Shown only on Case 08) -->
+          <div class="vault-chambers-matrix" id="vaultChambersMatrix" style="display: none;">
+            <div class="vault-matrix-header">
+              <span class="vault-icon">👑</span>
+              <div class="vault-matrix-titles">
+                <span class="vault-matrix-label">VEDIC VAULT SECURITY CORE</span>
+                <span class="vault-matrix-sub" id="vaultBreachProgress">0/4 Chambers Breached (0%)</span>
+              </div>
+            </div>
+            <div class="vault-chambers-grid" id="vaultChambersGrid">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Case Briefing Text -->
+          <div class="briefing-content">
+            <p id="panelBriefingText">Loading classified case file...</p>
           </div>
         </article>
 
-        <!-- Regex Warrant Submission Card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">🔍</span>
-              <span>Issue Search Warrant</span>
+        <!-- Regex Warrant Console -->
+        <article class="game-panel terminal-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">⚡</span>
+              <span>FORENSIC WARRANT CONSOLE</span>
             </div>
-            <span class="stat-chip">
-              <span class="chip-label">Case Score:</span>
-              <span class="chip-val" id="caseScore">0 pts</span>
-            </span>
+            <div class="terminal-badge" id="terminalSyntaxIndicator">
+              <span class="status-dot"></span> <span id="syntaxStatusText">STANDBY</span>
+            </div>
           </div>
 
-          <div class="regex-form-group">
-            <label class="regex-label" for="regexInput">Enter Regular Expression Pattern:</label>
-            <div class="regex-input-row">
-              <input 
-                type="text" 
-                id="regexInput" 
-                class="regex-input" 
-                placeholder="e.g. 110\d{3} or \+91-98\d{3}-\d{5}"
-                autocomplete="off"
-                spellcheck="false"
-              >
-              <button id="searchBtn" class="btn-primary">
-                <span>Issue Warrant 🔍</span>
+          <!-- Terminal Command Deck -->
+          <div class="terminal-body">
+            
+            <div class="terminal-prompt-row">
+              <span class="cmd-prompt">WARRANT://re.findall &gt;</span>
+              <div class="input-glow-wrapper">
+                <input 
+                  type="text" 
+                  id="regexInput" 
+                  class="terminal-input" 
+                  placeholder="Enter regex pattern (e.g. 110\d{3} or \+91-98\d{3}-\d{5})"
+                  autocomplete="off"
+                  spellcheck="false"
+                >
+              </div>
+              <button id="searchBtn" class="game-btn btn-warrant pulse-action">
+                <span class="icon">🔍</span>
+                <span class="btn-text">ISSUE WARRANT</span>
               </button>
             </div>
 
-            <!-- Quick Regex Chips -->
-            <div class="quick-chips-row">
-              <span class="helper-chip" data-token="\d" title="Digits [0-9]">\d</span>
-              <span class="helper-chip" data-token="\w" title="Word characters [a-zA-Z0-9_]">\w</span>
-              <span class="helper-chip" data-token="+" title="One or more repetition">+</span>
-              <span class="helper-chip" data-token="*" title="Zero or more repetition">*</span>
-              <span class="helper-chip" data-token="{3}" title="Exactly 3 occurrences">{3}</span>
-              <span class="helper-chip" data-token="{5}" title="Exactly 5 occurrences">{5}</span>
-              <span class="helper-chip" data-token="@" title="Literal @">@</span>
-              <span class="helper-chip" data-token="\." title="Escaped dot \.">\.</span>
-              <span class="helper-chip" data-token="^" title="Line start anchor">^</span>
-              <span class="helper-chip" data-token="$" title="Line end anchor">$</span>
+            <!-- Quick Regex Token Builders -->
+            <div class="quick-tokens-bar">
+              <span class="tokens-label">QUICK SYNTAX:</span>
+              <button class="token-btn" data-token="\d" title="Any Digit [0-9]">\d (digits)</button>
+              <button class="token-btn" data-token="\w" title="Any Word Character [a-zA-Z0-9_]">\w (words)</button>
+              <button class="token-btn" data-token="\s" title="Whitespace">\s (space)</button>
+              <button class="token-btn" data-token="+" title="One or more repetitions">+ (1+)</button>
+              <button class="token-btn" data-token="*" title="Zero or more repetitions">* (0+)</button>
+              <button class="token-btn" data-token="{3}" title="Exactly 3 occurrences">{3}</button>
+              <button class="token-btn" data-token="{5}" title="Exactly 5 occurrences">{5}</button>
+              <button class="token-btn" data-token="@" title="Literal @">@</button>
+              <button class="token-btn" data-token="\." title="Escaped dot \.">\. (dot)</button>
+              <button class="token-btn" data-token="^" title="Line start anchor">^ (start)</button>
+              <button class="token-btn" data-token="$" title="Line end anchor">$ (end)</button>
+              <button class="token-btn" data-token="[A-Z]" title="Capital letters">[A-Z]</button>
             </div>
-          </div>
 
-          <!-- Dynamic Feedback Box -->
-          <div id="feedbackBox" class="feedback-box">
-            <div id="feedbackText"></div>
-            <div id="feedbackMeta" class="feedback-meta"></div>
+            <!-- Terminal Diagnostic Readout Box -->
+            <div class="terminal-diagnostics" id="terminalDiagnostics">
+              <div class="diagnostics-log" id="diagnosticsLog">
+                <span class="dim">&gt; Terminal initialized. Ready to execute forensic warrant search.</span>
+              </div>
+              <div class="diagnostics-metrics" id="diagnosticsMetrics" style="display: none;">
+                <div class="metric-item">
+                  <span class="metric-label">Precision</span>
+                  <div class="metric-bar-bg"><div class="metric-bar-fill" id="metricPrecisionFill" style="width: 0%;"></div></div>
+                  <span class="metric-value" id="metricPrecisionVal">0%</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Recall</span>
+                  <div class="metric-bar-bg"><div class="metric-bar-fill" id="metricRecallFill" style="width: 0%;"></div></div>
+                  <span class="metric-value" id="metricRecallVal">0%</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Stars</span>
+                  <span class="metric-stars" id="metricStarsVal">☆☆☆</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Awarded</span>
+                  <span class="metric-score" id="metricScoreVal">+0 pts</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </article>
 
-        <!-- Clue Collection Notebook Card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">🗂️</span>
-              <span>Confirmed Clues Notebook</span>
+        <!-- Clue Inventory Tray -->
+        <article class="game-panel clues-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">🗂️</span>
+              <span>CONFIRMED CLUE INVENTORY</span>
             </div>
+            <span class="clue-count-badge" id="clueCountBadge">0 Clues Secured</span>
           </div>
-          <div class="clues-grid" id="cluesGrid">
-            <span class="clue-tag empty-state">No clues confirmed yet. Issue a warrant above!</span>
+          
+          <div class="clue-inventory-tray" id="clueInventoryTray">
+            <!-- Dynamically populated clue item cards -->
           </div>
         </article>
 
-        <!-- Detective Field Notes (Append-only) -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">📝</span>
-              <span>Detective Field Notes</span>
+        <!-- Detective Notes Deck -->
+        <article class="game-panel notes-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">📝</span>
+              <span>FIELD OBSERVATION NOTES</span>
             </div>
-            <span class="stat-chip">
-              <span class="chip-label">Append-only</span>
-            </span>
+            <span class="tag-append">APPEND-ONLY AUDIT</span>
           </div>
-          <div class="notes-input-row">
+
+          <div class="notes-form">
             <input 
               type="text" 
               id="noteInput" 
               class="notes-input" 
-              placeholder="Jot down a suspect alibi observation or pattern lead..."
+              placeholder="Record suspect observation, alibi discrepancy, or pattern lead..."
               autocomplete="off"
             >
-            <button id="addNoteBtn" class="btn-secondary">Append Note</button>
+            <button id="addNoteBtn" class="game-btn btn-secondary">
+              <span>Record Note</span>
+            </button>
           </div>
-          <div class="notes-list" id="notesList">
-            <div style="color: var(--text-light); font-size: 12px; font-style: italic;">
-              No field notes recorded for this case yet.
-            </div>
+
+          <div class="notes-feed" id="notesFeed">
+            <!-- Dynamically populated field notes -->
           </div>
         </article>
 
-      </section>
+      </div>
 
-      <!-- Right Column: Evidence Board & Accusation -->
-      <section class="right-col">
+
+      <!-- ===================================================================== -->
+      <!-- RIGHT COLUMN: Evidence Board & Suspect Indictment Lineup              -->
+      <!-- ===================================================================== -->
+      <div class="stage-col stage-col-right">
         
-        <!-- Evidence Board Card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">📜</span>
-              <span>Evidence Board (Wiretap / Logs)</span>
+        <!-- Tactical Evidence Board -->
+        <article class="game-panel evidence-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">📜</span>
+              <span>TACTICAL EVIDENCE BOARD</span>
             </div>
-            <span class="stat-chip">
-              <span class="chip-label">Matches live highlighted</span>
-            </span>
+            <div class="evidence-toolbar">
+              <button id="clearHighlightsBtn" class="game-btn btn-mini" title="Clear active highlights">
+                <span>✕ Clear Matches</span>
+              </button>
+              <button id="copyEvidenceBtn" class="game-btn btn-mini" title="Copy raw evidence text">
+                <span>📋 Copy Stream</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="evidence-subbar">
+            <span class="file-name" id="evidenceFileName">STREAM://CASE_EVIDENCE_INTERCEPT.TXT</span>
+            <span class="live-indicator">● LIVE MATCH HIGHLIGHTING ENGAGED</span>
           </div>
 
           <!-- Highlightable Evidence Container -->
-          <div class="evidence-container" id="evidenceBox">Loading evidence text...</div>
+          <div class="evidence-display-wrapper">
+            <pre class="evidence-content" id="evidenceBox">Loading case evidence stream...</pre>
+          </div>
         </article>
 
-        <!-- Final Accusation Card -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">⚖️</span>
-              <span>Final Accusation</span>
+        <!-- Suspect Lineup & Indictment Station -->
+        <article class="game-panel suspect-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="header-icon">⚖️</span>
+              <span>SUSPECT INDICTMENT LINEUP</span>
             </div>
-            <span class="stat-chip">
-              <span class="chip-label">Wrong = -20 Rep</span>
-            </span>
+            <span class="penalty-warning">⚠️ FALSE ACCUSATION = -20 HP PENALTY</span>
           </div>
 
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Based on your collected clues and evidence, identify and detain the mastermind:
+          <p class="suspect-instructions">
+            Cross-reference your confirmed clues against suspect alibis. Target and arrest the mastermind:
           </p>
 
-          <!-- Suspects Radio Selection -->
-          <div class="suspects-list" id="suspectsList">
-            <!-- Dynamic Suspect Cards -->
+          <!-- Interactive Suspect Cards Lineup -->
+          <div class="suspects-lineup" id="suspectsLineup">
+            <!-- Dynamically populated suspect cards -->
           </div>
 
-          <button id="accuseBtn" class="btn-primary" style="width: 100%; justify-content: center;">
-            <span>Arrest & Accuse Suspect 🚨</span>
-          </button>
-
-          <!-- Accusation Result Notification -->
-          <div id="accusationStatus" class="accusation-status-box"></div>
-        </article>
-
-        <!-- Bureau Leaderboard Card (CSV) -->
-        <article class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <span class="icon">🏆</span>
-              <span>Bureau Leaderboard (CSV)</span>
-            </div>
-            <button id="refreshLeaderboardBtn" class="btn-secondary" style="font-size: 11px;">
-              ↻ Refresh
+          <!-- Accuse Action Button -->
+          <div class="accuse-action-row">
+            <button id="accuseBtn" class="game-btn btn-arrest pulse-action">
+              <span class="icon">🚨</span>
+              <span class="btn-text">ARREST &amp; INDICT SUSPECT</span>
             </button>
           </div>
-          <div style="overflow-x: auto;">
-            <table class="leaderboard-table">
-              <thead>
-                <tr>
-                  <th>Detective</th>
-                  <th>Case</th>
-                  <th>Score</th>
-                  <th>Stars</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="leaderboardBody">
-                <tr><td colspan="5" style="text-align: center; color: var(--text-light);">Loading leaderboard records...</td></tr>
-              </tbody>
-            </table>
+
+          <!-- Inline Verdict Box -->
+          <div class="verdict-box" id="verdictBox" style="display: none;">
+            <div class="verdict-content" id="verdictContent"></div>
+            <div class="verdict-actions" id="verdictActions"></div>
           </div>
+
         </article>
 
-      </section>
+      </div>
 
     </main>
 
-    <!-- Footer Note -->
-    <footer class="footer-note">
-      Regex Detective • Crafted with soft pastel aesthetic • Cybercrime Department
-    </footer>
+  </section>
 
+
+  <!-- ========================================================================= -->
+  <!-- 4. MODALS & OVERLAYS                                                      -->
+  <!-- ========================================================================= -->
+
+  <!-- Victory / Mission Cleared Modal -->
+  <div class="game-modal-backdrop" id="victoryModal">
+    <div class="game-modal victory-card">
+      <div class="confetti-particles" aria-hidden="true"></div>
+      <div class="modal-badge-crown">👑</div>
+      <h2 class="modal-title victory-title">MISSION CLEARED</h2>
+      <div class="modal-subtitle" id="victorySubtitle">SUSPECT APPREHENDED &amp; CONVICTED</div>
+
+      <!-- Animated Stars Display -->
+      <div class="modal-stars-row" id="victoryStars">
+        <span class="star-slot active">★</span>
+        <span class="star-slot active">★</span>
+        <span class="star-slot active">★</span>
+      </div>
+
+      <!-- Outcome Message -->
+      <p class="modal-message" id="victoryMessage">
+        The suspect has signed a full confession. The illegal operations for this cell have been neutralized!
+      </p>
+
+      <!-- Rewards Grid -->
+      <div class="modal-rewards-grid">
+        <div class="reward-pill">
+          <span class="reward-label">Score Earned</span>
+          <span class="reward-val" id="victoryScoreVal">+500 pts</span>
+        </div>
+        <div class="reward-pill">
+          <span class="reward-label">Reputation Boost</span>
+          <span class="reward-val" id="victoryRepVal">+20 HP</span>
+        </div>
+        <div class="reward-pill">
+          <span class="reward-label">Coins Bounty</span>
+          <span class="reward-val" id="victoryCoinsVal">+25 🪙</span>
+        </div>
+      </div>
+
+      <!-- Modal Action Buttons -->
+      <div class="modal-actions-row">
+        <button id="victoryReportBtn" class="game-btn btn-secondary">
+          <span class="icon">📊</span>
+          <span>View Matplotlib Report</span>
+        </button>
+        <button id="victoryMapBtn" class="game-btn btn-secondary">
+          <span class="icon">🗺️</span>
+          <span>Mission Map</span>
+        </button>
+        <button id="victoryNextBtn" class="game-btn btn-primary">
+          <span class="icon">⏩</span>
+          <span>Next Mission</span>
+        </button>
+      </div>
+    </div>
   </div>
 
+
+  <!-- Defeat / Mission Failed Modal -->
+  <div class="game-modal-backdrop" id="defeatModal">
+    <div class="game-modal defeat-card">
+      <div class="siren-flash" aria-hidden="true"></div>
+      <div class="modal-badge-skull">🚨</div>
+      <h2 class="modal-title defeat-title">CASE COMPROMISED</h2>
+      <div class="modal-subtitle" id="defeatSubtitle">FALSE ARREST // INVESTIGATION COMPROMISED</div>
+
+      <p class="modal-message" id="defeatMessage">
+        The accused individual possessed an ironclad alibi. Your bureau reputation has taken a severe penalty.
+      </p>
+
+      <div class="modal-rewards-grid">
+        <div class="reward-pill penalty">
+          <span class="reward-label">Reputation Loss</span>
+          <span class="reward-val" id="defeatRepVal">-20 HP</span>
+        </div>
+        <div class="reward-pill penalty">
+          <span class="reward-label">Current Standing</span>
+          <span class="reward-val" id="defeatCurrentRepVal">80%</span>
+        </div>
+      </div>
+
+      <div class="modal-actions-row">
+        <button id="defeatRetryBtn" class="game-btn btn-primary">
+          <span class="icon">↻</span>
+          <span>Reset &amp; Retry Case</span>
+        </button>
+        <button id="defeatMapBtn" class="game-btn btn-secondary">
+          <span class="icon">🗺️</span>
+          <span>Fall Back to Map</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Forensic Report Chart Modal -->
+  <div class="game-modal-backdrop" id="reportModal">
+    <div class="game-modal report-card">
+      <div class="modal-header-row">
+        <div class="modal-title-group">
+          <span class="modal-tag">MATPLOTLIB FORENSIC TELEMETRY</span>
+          <h2 id="reportModalTitle">Investigation Performance Chart</h2>
+        </div>
+        <button id="closeReportBtn" class="game-btn btn-mini" title="Close report">✕</button>
+      </div>
+
+      <div class="report-image-container">
+        <img id="reportChartImg" src="" alt="Matplotlib Case Investigation Report Chart">
+      </div>
+
+      <div class="report-meta-grid" id="reportMetaGrid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="modal-actions-row" style="margin-top: 18px;">
+        <a id="reportDownloadLink" href="#" target="_blank" class="game-btn btn-secondary">
+          <span>Open Full-Resolution Image ↗</span>
+        </a>
+        <button id="closeReportFooterBtn" class="game-btn btn-primary">
+          <span>Dismiss Report</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bureau Leaderboard Modal -->
+  <div class="game-modal-backdrop" id="leaderboardModal">
+    <div class="game-modal leaderboard-card">
+      <div class="modal-header-row">
+        <div class="modal-title-group">
+          <span class="modal-tag">CYBERCRIME DIVISION RECORDS</span>
+          <h2>Bureau Leaderboard (CSV)</h2>
+        </div>
+        <div class="modal-header-actions">
+          <button id="refreshLeaderboardModalBtn" class="game-btn btn-mini">↻ Refresh</button>
+          <button id="closeLeaderboardBtn" class="game-btn btn-mini">✕</button>
+        </div>
+      </div>
+
+      <div class="leaderboard-table-wrapper">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Detective</th>
+              <th>Case</th>
+              <th>Score</th>
+              <th>Stars</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardModalBody">
+            <tr>
+              <td colspan="6" style="text-align:center; padding: 20px; color: var(--text-dim);">
+                Fetching bureau records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-actions-row" style="margin-top: 18px;">
+        <button id="closeLeaderboardFooterBtn" class="game-btn btn-primary">
+          <span>Close Dossier</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Game Client Script -->
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

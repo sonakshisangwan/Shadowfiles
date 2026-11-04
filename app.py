@@ -45,6 +45,25 @@ def play():
     return render_template("index.html")
 
 
+@app.route("/player", methods=["GET"])
+def get_player_profile():
+    """Returns current player profile, stats, coins, and solved cases."""
+    return jsonify({
+        "success": True,
+        "player": player.to_dict(),
+    }), 200
+
+
+@app.route("/cases", methods=["GET"])
+def list_all_cases():
+    """Returns list of all available cases in the bureau."""
+    return jsonify({
+        "success": True,
+        "cases": case_manager.list_cases(),
+        "player": player.to_dict(),
+    }), 200
+
+
 @app.route("/case/<case_id>", methods=["GET"])
 def get_case(case_id: str):
     """Fetches details, evidence preview, and investigation progress for a specific case."""
