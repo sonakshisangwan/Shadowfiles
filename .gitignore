@@ -1,5 +1,23 @@
-venv/
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment variables
 .env
-data/saves/
+
+# Editor & IDE settings
+.vscode/
+.idea/
+
+# Local session saves and generated reports (keep directories via .gitkeep)
+data/saves/*.pkl
+data/reports/*.png
+!data/saves/.gitkeep
+!data/reports/.gitkeep
+!data/notes/.gitkeep
