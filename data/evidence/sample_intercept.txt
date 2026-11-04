@@ -1,0 +1,5 @@
+[2026-11-04 10:14:02] INTERCEPT_NODE_01: Inbound SMS to +91-98765-43210
+[2026-11-04 10:15:33] Transaction alert: Sent Rs. 25000 to suspect.dev@okhdfcbank
+[2026-11-04 10:18:45] Decoy packet detected: +91-11111-22222
+[2026-11-04 10:22:10] Terminal login attempt from IP 10.0.4.12
+[2026-11-04 10:30:00] Location ping: Connaught Place, New Delhi - PIN 110001

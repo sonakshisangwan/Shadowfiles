@@ -1,13 +1,31 @@
-"""Custom exceptions for Regex Detective."""
+"""Custom exceptions for Regex Detective / Shadowfiles."""
+
 
 class DetectiveError(Exception):
-    """Base class for all game errors."""
+    """Base exception for all game errors."""
+    pass
+
 
 class InvalidWarrantError(DetectiveError):
-    """Player's regex is invalid or syntax error."""
+    """Raised when regex pattern is invalid, empty, or malformed."""
+    pass
+
+
+class CaseNotFoundError(DetectiveError):
+    """Raised when a requested case file cannot be found."""
+    pass
+
+
+class EvidenceLoadError(DetectiveError):
+    """Raised when evidence file or content cannot be loaded."""
+    pass
+
 
 class WarrantBudgetExceeded(DetectiveError):
-    """Player used all search attempts."""
+    """Raised when player exceeds allotted search warrants/attempts."""
+    pass
+
 
 class WrongAccusationError(DetectiveError):
-    """Player accused the wrong suspect."""
+    """Raised when player accuses the wrong suspect."""
+    pass
