@@ -1,0 +1,13 @@
+{
+  "case_id": "case_01",
+  "title": "Operation Dark Rupee",
+  "briefing": "Rookie, cybercrime intelligence intercepted traffic from a local phishing syndicate operating in Connaught Place. Extract all 6-digit Delhi PIN codes starting with 110 (format: 110XXX) from the server log fragments to trace their operational base.",
+  "difficulty": "Beginner",
+  "search_budget": 4,
+  "evidence_name": "Delhi Server Log",
+  "evidence_text": "[2026-11-04 09:12:01] Gateway sync: New Delhi North hub PIN 110001 online.\n[2026-11-04 09:15:22] Foreign packet drop: PIN 400001 (Mumbai - out of scope).\n[2026-11-04 09:18:40] Decoy ping: PIN 11099 (invalid 5-digit sequence).\n[2026-11-04 09:22:15] Outpost connected: Karol Bagh terminal PIN 110005 active.\n[2026-11-04 09:30:00] Surveillance alert: Suspect Rajesh Oberoi logged in from terminal 110001.\n[2026-11-04 09:35:44] Decoy ping: PIN 1100001 (invalid 7-digit sequence).\n[2026-11-04 09:40:10] Safehouse spotted near Chandni Chowk PIN 110006.\n",
+  "expected_clues": ["110001", "110005", "110006"],
+  "decoys": ["400001", "11099", "1100001"],
+  "suspects": ["Rajesh Oberoi", "Sunil Mehta", "Ananya Rao", "Vikram Malhotra"],
+  "culprit": "Rajesh Oberoi"
+}

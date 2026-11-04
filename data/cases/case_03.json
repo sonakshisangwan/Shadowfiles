@@ -1,0 +1,13 @@
+{
+  "case_id": "case_03",
+  "title": "The UPI Syndicate",
+  "briefing": "A cyber fraud syndicate is extorting victims through fake KYC calls and routing funds across UPI handles. Extract all target UPI handles ending with '@okhdfcbank' or '@oksbi' to trace the kingpin's bank accounts.",
+  "difficulty": "Intermediate",
+  "search_budget": 4,
+  "evidence_name": "Payment Gateway Dump",
+  "evidence_text": "[2026-11-04 11:02:11] Phish attempt: Click bit.ly/bank-alert-kyc\n[2026-11-04 11:04:45] Fund diversion: 80,000 INR transferred to dark.raj@okhdfcbank\n[2026-11-04 11:06:12] Test handle verified: test.dummy@fakeupi (IGNORED)\n[2026-11-04 11:09:30] Secondary diversion: 45,000 INR sent to phantom99@oksbi\n[2026-11-04 11:12:00] Decoy transaction: support@gov.in (Official handle)\n[2026-11-04 11:15:20] Wiretrace identifies account holder 'Pooja Verma' linked to dark.raj@okhdfcbank\n",
+  "expected_clues": ["dark.raj@okhdfcbank", "phantom99@oksbi"],
+  "decoys": ["test.dummy@fakeupi", "support@gov.in"],
+  "suspects": ["Pooja Verma", "Sunil Mehta", "Ananya Rao", "Deepak Joshi"],
+  "culprit": "Pooja Verma"
+}

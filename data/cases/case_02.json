@@ -1,0 +1,13 @@
+{
+  "case_id": "case_02",
+  "title": "Operation Hawala Wire",
+  "briefing": "Cyber police intercepted burner phone communications in Delhi NCR. Extract authentic active suspect phone numbers matching the format '+91-98XXX-XXXXX'. Beware of fake burner numbers and inactive decoy test lines.",
+  "difficulty": "Beginner-Intermediate",
+  "search_budget": 4,
+  "evidence_name": "Cyber Hub Wiretap",
+  "evidence_text": "[2026-11-04 10:14:02] INTERCEPT_NODE_01: Inbound SMS from +91-98765-43210\n[2026-11-04 10:15:33] Decoy burner detected: +91-00000-00000 (inactive burner)\n[2026-11-04 10:20:12] Secondary burner detected: +91-11111-22222 (test sim)\n[2026-11-04 10:22:10] Legitimate suspect callback to +91-98123-45678\n[2026-11-04 10:30:00] Location ping: Connaught Place, New Delhi\n[2026-11-04 10:35:12] Wiretap audio identifies Vikram Malhotra operating line +91-98765-43210\n",
+  "expected_clues": ["+91-98765-43210", "+91-98123-45678"],
+  "decoys": ["+91-00000-00000", "+91-11111-22222"],
+  "suspects": ["Vikram Malhotra", "Rohan Sharma", "Pooja Verma", "Kabir Khan"],
+  "culprit": "Vikram Malhotra"
+}

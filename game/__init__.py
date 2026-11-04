@@ -9,6 +9,7 @@ from game.exceptions import (
     WarrantBudgetExceeded,
     WrongAccusationError,
 )
+from game.storage import CaseManager, Player, case_manager, player
 
 __all__ = [
     "Evidence",
@@ -23,4 +24,8 @@ __all__ = [
     "EvidenceLoadError",
     "WarrantBudgetExceeded",
     "WrongAccusationError",
+    "Player",
+    "CaseManager",
+    "case_manager",
+    "player",
 ]
