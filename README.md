@@ -5,7 +5,7 @@
 
 ---
 
-## 📖 1. Project Overview & Theme
+##  1. Project Overview & Theme
 
 In **Regex Detective / Shadowfiles**, the player acts as a rookie cybercrime investigator assigned to the Delhi Cyber Bureau. An underground cybercrime network—the **Apex Syndicate**—is laundering funds, compromising ATMs, intercepting phone lines, and disguising classified memos across Indian metropolitan hubs (Connaught Place, Karol Bagh, Cyber Hub).
 
@@ -20,7 +20,7 @@ The UI breaks away from generic dark cyberpunk templates, employing a **soft, co
 
 ---
 
-## 🛠️ 2. Technology Stack
+##  2. Technology Stack
 
 - **Backend Framework**: [Flask](https://flask.palletsprojects.com/) (REST API architecture)
 - **Regex & Pattern Engine**: Python standard `re` module (`re.compile`, `re.findall`, `re.sub`, error trapping `re.error`)
