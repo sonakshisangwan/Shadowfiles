@@ -1,5 +1,5 @@
 """Regex Detective Game Package."""
-from game.engine import DetectiveEngine
+from game.engine import DetectiveEngine, SearchResult
 from game.evidence import Case, ChatEvidence, EmailEvidence, Evidence
 from game.exceptions import (
     CaseNotFoundError,
@@ -16,6 +16,7 @@ __all__ = [
     "ChatEvidence",
     "Case",
     "DetectiveEngine",
+    "SearchResult",
     "DetectiveError",
     "InvalidWarrantError",
     "CaseNotFoundError",
