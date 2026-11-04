@@ -1,6 +1,5 @@
 """Flask Application for Regex Detective / Shadowfiles."""
-from typing import Any, Dict
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 
 from game.engine import DetectiveEngine
 from game.exceptions import (
@@ -15,7 +14,10 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    """API landing and system status endpoint."""
+    """Renders the detective game frontend for web browsers, or JSON for API clients."""
+    if "text/html" in request.headers.get("Accept", ""):
+        return render_template("index.html")
+
     return jsonify({
         "app": "Regex Detective / Shadowfiles",
         "status": "online",
@@ -23,6 +25,13 @@ def home():
         "player": player.to_dict(),
         "available_cases": case_manager.list_cases(),
     }), 200
+
+
+@app.route("/play", methods=["GET"])
+@app.route("/game", methods=["GET"])
+def play():
+    """Dedicated game interface route."""
+    return render_template("index.html")
 
 
 @app.route("/case/<case_id>", methods=["GET"])

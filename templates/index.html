@@ -1,12 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regex Detective 🕵️</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Detective 🕵️ | Cybercrime Bureau</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Regex Detective 🕵️</h1>
-    <p>Welcome to Cybercrime Bureau. Case files loading...</p>
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="brand-wrapper">
+        <div class="brand-icon">🕵️</div>
+        <div class="brand-titles">
+          <h1>Regex Detective</h1>
+          <p>Cybercrime Bureau • Shadowfiles Division</p>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-chip">
+          <span class="chip-label">Reputation:</span>
+          <span class="chip-val" id="playerReputation">100%</span>
+        </div>
+        <div class="stat-chip">
+          <span class="chip-label">Total Score:</span>
+          <span class="chip-val" id="playerScore">0 pts</span>
+        </div>
+        <button id="resetBtn" class="btn-secondary" title="Reset search budget for this case">
+          ↻ Reset Case
+        </button>
+      </div>
+    </header>
+
+    <!-- Case Navigation Tabs -->
+    <nav class="case-tabs-nav" aria-label="Investigation Cases">
+      <button class="case-tab-btn active" data-case-id="case_01">
+        <span>📁 Case 01: Dark Rupee</span>
+        <span class="badge-diff">Beginner</span>
+      </button>
+      <button class="case-tab-btn" data-case-id="case_02">
+        <span>📞 Case 02: Hawala Wire</span>
+        <span class="badge-diff">Intermediate</span>
+      </button>
+      <button class="case-tab-btn" data-case-id="case_03">
+        <span>💳 Case 03: UPI Syndicate</span>
+        <span class="badge-diff">Advanced</span>
+      </button>
+    </nav>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid">
+      
+      <!-- Left Column: Briefing, Warrants & Clues -->
+      <section class="left-col">
+        
+        <!-- Case Briefing Card -->
+        <article class="card briefing-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📋</span>
+              <span id="caseTitle">Loading case...</span>
+            </div>
+            <span class="stat-chip">
+              <span class="chip-label">Level:</span>
+              <span class="chip-val" id="caseDiff">Beginner</span>
+            </span>
+          </div>
+          <p class="case-story" id="caseBriefing">
+            Fetching classified case briefing from archives...
+          </p>
+
+          <!-- Warrant Budget Meter -->
+          <div class="warrant-meter">
+            <span class="meter-label">Warrant Budget</span>
+            <div class="warrant-dots" id="warrantDots"></div>
+            <span class="meter-label" id="warrantText">4 / 4 warrants left</span>
+          </div>
+        </article>
+
+        <!-- Regex Warrant Submission Card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🔍</span>
+              <span>Issue Search Warrant</span>
+            </div>
+            <span class="stat-chip">
+              <span class="chip-label">Case Score:</span>
+              <span class="chip-val" id="caseScore">0 pts</span>
+            </span>
+          </div>
+
+          <div class="regex-form-group">
+            <label class="regex-label" for="regexInput">Enter Regular Expression Pattern:</label>
+            <div class="regex-input-row">
+              <input 
+                type="text" 
+                id="regexInput" 
+                class="regex-input" 
+                placeholder="e.g. 110\d{3} or \+91-98\d{3}-\d{5}"
+                autocomplete="off"
+                spellcheck="false"
+              >
+              <button id="searchBtn" class="btn-primary">
+                <span>Issue Warrant 🔍</span>
+              </button>
+            </div>
+
+            <!-- Quick Regex Chips -->
+            <div class="quick-chips-row">
+              <span class="helper-chip" data-token="\d" title="Digits [0-9]">\d</span>
+              <span class="helper-chip" data-token="\w" title="Word characters [a-zA-Z0-9_]">\w</span>
+              <span class="helper-chip" data-token="+" title="One or more repetition">+</span>
+              <span class="helper-chip" data-token="*" title="Zero or more repetition">*</span>
+              <span class="helper-chip" data-token="{3}" title="Exactly 3 occurrences">{3}</span>
+              <span class="helper-chip" data-token="{5}" title="Exactly 5 occurrences">{5}</span>
+              <span class="helper-chip" data-token="@" title="Literal @">@</span>
+              <span class="helper-chip" data-token="\." title="Escaped dot \.">\.</span>
+              <span class="helper-chip" data-token="^" title="Line start anchor">^</span>
+              <span class="helper-chip" data-token="$" title="Line end anchor">$</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Feedback Box -->
+          <div id="feedbackBox" class="feedback-box">
+            <div id="feedbackText"></div>
+            <div id="feedbackMeta" class="feedback-meta"></div>
+          </div>
+        </article>
+
+        <!-- Clue Collection Notebook Card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🗂️</span>
+              <span>Confirmed Clues Notebook</span>
+            </div>
+          </div>
+          <div class="clues-grid" id="cluesGrid">
+            <span class="clue-tag empty-state">No clues confirmed yet. Issue a warrant above!</span>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- Right Column: Evidence Board & Accusation -->
+      <section class="right-col">
+        
+        <!-- Evidence Board Card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📜</span>
+              <span>Evidence Board (Wiretap / Logs)</span>
+            </div>
+            <span class="stat-chip">
+              <span class="chip-label">Matches live highlighted</span>
+            </span>
+          </div>
+
+          <!-- Highlightable Evidence Container -->
+          <div class="evidence-container" id="evidenceBox">Loading evidence text...</div>
+        </article>
+
+        <!-- Final Accusation Card -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">⚖️</span>
+              <span>Final Accusation</span>
+            </div>
+            <span class="stat-chip">
+              <span class="chip-label">Wrong = -20 Rep</span>
+            </span>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Based on your collected clues and evidence, identify and detain the mastermind:
+          </p>
+
+          <!-- Suspects Radio Selection -->
+          <div class="suspects-list" id="suspectsList">
+            <!-- Dynamic Suspect Cards -->
+          </div>
+
+          <button id="accuseBtn" class="btn-primary" style="width: 100%; justify-content: center;">
+            <span>Arrest & Accuse Suspect 🚨</span>
+          </button>
+
+          <!-- Accusation Result Notification -->
+          <div id="accusationStatus" class="accusation-status-box"></div>
+        </article>
+
+      </section>
+
+    </main>
+
+    <!-- Footer Note -->
+    <footer class="footer-note">
+      Regex Detective • Crafted with soft pastel aesthetic • Cybercrime Department
+    </footer>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

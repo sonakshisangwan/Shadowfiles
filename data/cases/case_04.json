@@ -1,0 +1,27 @@
+{
+  "case_id": "case_04",
+  "title": "The Midnight Alibi",
+  "briefing": "The vault at Connaught Place was breached between 23:00 and 01:30. Suspects claim they were home before midnight. Extract all late-night timestamps matching 24-hour date-time format '2026-11-0[45] (?:23|00|01):\\d{2}' to shatter their alibis. Beware of daytime and morning decoy timestamps.",
+  "difficulty": "Intermediate",
+  "search_budget": 4,
+  "evidence_name": "Cell Tower & Surveillance Transcripts",
+  "evidence_text": "=== SURVEILLANCE & CELL TOWER TRANSCRIPTS [DELHI NCR] ===\n[2026-11-04 14:30] Routine tower heartbeat: Signal strength normal (Decoy).\n[2026-11-04 18:22] Suspect Alok Verma pinged at residential cell tower Sector 14.\n[2026-11-04 23:42] CRITICAL: Unregistered vehicle spotted near Vault entrance: 2026-11-04 23:42.\n[2026-11-05 00:15] CRITICAL: Vault perimeter alarm triggered at timestamp: 2026-11-05 00:15.\n[2026-11-05 01:08] CRITICAL: Keycard swipe registered to suspect Alok Verma at: 2026-11-05 01:08.\n[2026-11-05 08:45] Morning shift security turnover log: 2026-11-05 08:45.\n[2026-11-05 12:00] Routine noon check: 2026-11-05 12:00 (Decoy).\n",
+  "expected_clues": [
+    "2026-11-04 23:42",
+    "2026-11-05 00:15",
+    "2026-11-05 01:08"
+  ],
+  "decoys": [
+    "2026-11-04 14:30",
+    "2026-11-04 18:22",
+    "2026-11-05 08:45",
+    "2026-11-05 12:00"
+  ],
+  "suspects": [
+    "Alok Verma",
+    "Naveen Chawla",
+    "Meera Sen",
+    "Kavita Rao"
+  ],
+  "culprit": "Alok Verma"
+}
