@@ -28,6 +28,12 @@
           <span class="chip-label">Total Score:</span>
           <span class="chip-val" id="playerScore">0 pts</span>
         </div>
+        <button id="saveBtn" class="btn-secondary" title="Save game session (Pickle)">
+          💾 Save
+        </button>
+        <button id="loadBtn" class="btn-secondary" title="Restore game session (Pickle)">
+          📂 Load
+        </button>
         <button id="resetBtn" class="btn-secondary" title="Reset search budget for this case">
           ↻ Reset Case
         </button>
@@ -160,6 +166,34 @@
           </div>
         </article>
 
+        <!-- Detective Field Notes (Append-only) -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">📝</span>
+              <span>Detective Field Notes</span>
+            </div>
+            <span class="stat-chip">
+              <span class="chip-label">Append-only</span>
+            </span>
+          </div>
+          <div class="notes-input-row">
+            <input 
+              type="text" 
+              id="noteInput" 
+              class="notes-input" 
+              placeholder="Jot down a suspect alibi observation or pattern lead..."
+              autocomplete="off"
+            >
+            <button id="addNoteBtn" class="btn-secondary">Append Note</button>
+          </div>
+          <div class="notes-list" id="notesList">
+            <div style="color: var(--text-light); font-size: 12px; font-style: italic;">
+              No field notes recorded for this case yet.
+            </div>
+          </div>
+        </article>
+
       </section>
 
       <!-- Right Column: Evidence Board & Accusation -->
@@ -208,6 +242,35 @@
 
           <!-- Accusation Result Notification -->
           <div id="accusationStatus" class="accusation-status-box"></div>
+        </article>
+
+        <!-- Bureau Leaderboard Card (CSV) -->
+        <article class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon">🏆</span>
+              <span>Bureau Leaderboard (CSV)</span>
+            </div>
+            <button id="refreshLeaderboardBtn" class="btn-secondary" style="font-size: 11px;">
+              ↻ Refresh
+            </button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Detective</th>
+                  <th>Case</th>
+                  <th>Score</th>
+                  <th>Stars</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-light);">Loading leaderboard records...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </article>
 
       </section>

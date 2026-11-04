@@ -26,6 +26,13 @@ const elements = {
   playerScore: document.getElementById("playerScore"),
   caseScore: document.getElementById("caseScore"),
   resetBtn: document.getElementById("resetBtn"),
+  saveBtn: document.getElementById("saveBtn"),
+  loadBtn: document.getElementById("loadBtn"),
+  noteInput: document.getElementById("noteInput"),
+  addNoteBtn: document.getElementById("addNoteBtn"),
+  notesList: document.getElementById("notesList"),
+  leaderboardBody: document.getElementById("leaderboardBody"),
+  refreshLeaderboardBtn: document.getElementById("refreshLeaderboardBtn"),
 };
 
 // Escape HTML characters safely
@@ -61,6 +68,7 @@ async function loadCase(caseId) {
 
     activeCaseData = data;
     renderCaseDetails(data);
+    fetchNotes(caseId);
   } catch (err) {
     showFeedback(`Network error while loading case: ${err}`, "error");
   }
@@ -154,16 +162,12 @@ function highlightEvidence(matches) {
     return;
   }
 
-  // Escape base text first
   let escaped = escapeHtml(rawText);
-
-  // Sort unique matches by length descending so longer substrings match first
   const uniqueMatches = Array.from(new Set(matches)).sort((a, b) => b.length - a.length);
 
   uniqueMatches.forEach((m) => {
     if (!m) return;
     const escapedMatch = escapeHtml(m);
-    // Replace all occurrences using regex safe escaping
     const safeRegex = new RegExp(escapedMatch.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"), "g");
     escaped = escaped.replace(safeRegex, `<mark class="match-highlight">${escapedMatch}</mark>`);
   });
@@ -203,12 +207,10 @@ async function executeSearch() {
       return;
     }
 
-    // Update case display with search results
     updateWarrantBudget(data.remaining_budget, activeCaseData.search_budget);
     renderCollectedClues(data.collected_clues);
     highlightEvidence(data.matches);
 
-    // Update global player score
     if (elements.playerScore) {
       elements.playerScore.textContent = `${data.total_score} pts`;
     }
@@ -216,7 +218,6 @@ async function executeSearch() {
       elements.caseScore.textContent = `${data.score} pts`;
     }
 
-    // Format stars and score meta
     const starString = "★".repeat(data.stars) + "☆".repeat(3 - data.stars);
     const metaHtml = `
       <span>Stars: ${starString}</span>
@@ -225,7 +226,6 @@ async function executeSearch() {
       <span>Points: +${data.score}</span>
     `;
 
-    // Choose feedback theme
     let statusType = "success";
     if (data.false_matches && data.false_matches.length > 0) {
       statusType = "warning";
@@ -274,7 +274,8 @@ async function submitAccusation() {
       elements.playerScore.textContent = `${data.score} pts`;
     }
 
-    showAccusationStatus(data.message, data.solved);
+    showAccusationStatus(data.message, data.solved, data.report_url);
+    fetchLeaderboard();
   } catch (err) {
     showAccusationStatus(`Failed submitting accusation: ${err}`, false);
   } finally {
@@ -296,6 +297,150 @@ async function resetCurrentCase() {
   }
 }
 
+// Pickle Session Save / Load
+async function saveGameSession() {
+  try {
+    const res = await fetch("/session/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slot: "detective_save" }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showFeedback(`Progress saved via pickle: ${data.message}`, "success");
+    } else {
+      showFeedback(`Save failed: ${data.message}`, "error");
+    }
+  } catch (err) {
+    showFeedback(`Error saving session: ${err}`, "error");
+  }
+}
+
+async function loadGameSession() {
+  try {
+    const res = await fetch("/session/load", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slot: "detective_save" }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      showFeedback("Player session restored from pickle save file!", "success");
+      if (elements.playerReputation) {
+        elements.playerReputation.textContent = `${data.player.reputation}%`;
+      }
+      if (elements.playerScore) {
+        elements.playerScore.textContent = `${data.player.score} pts`;
+      }
+      loadCase(data.player.current_case_id || "case_01");
+    } else {
+      showFeedback(`Load failed: ${data.message}`, "error");
+    }
+  } catch (err) {
+    showFeedback(`Error loading session: ${err}`, "error");
+  }
+}
+
+// Field Notes
+async function addDetectiveNote() {
+  if (!elements.noteInput) return;
+  const note = elements.noteInput.value.trim();
+  if (!note) return;
+
+  try {
+    const res = await fetch("/notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        case_id: currentCaseId,
+        note: note,
+      }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      elements.noteInput.value = "";
+      renderNotes(data.all_notes);
+    }
+  } catch (err) {
+    console.error("Failed to append note:", err);
+  }
+}
+
+async function fetchNotes(caseId) {
+  if (!elements.notesList) return;
+  try {
+    const res = await fetch(`/notes?case_id=${caseId}`);
+    const data = await res.json();
+    if (data.success) {
+      renderNotes(data.notes);
+    }
+  } catch (err) {
+    console.error("Failed to fetch notes:", err);
+  }
+}
+
+function renderNotes(notes) {
+  if (!elements.notesList) return;
+  elements.notesList.innerHTML = "";
+  if (!notes || notes.length === 0) {
+    elements.notesList.innerHTML =
+      '<div style="color: var(--text-light); font-size: 12px; font-style: italic;">No field notes recorded for this case yet.</div>';
+    return;
+  }
+
+  notes.slice().reverse().forEach((n) => {
+    const item = document.createElement("div");
+    item.className = "note-item";
+    item.innerHTML = `
+      <div class="note-header">
+        <span>${escapeHtml(n.author || "Detective")}</span>
+        <span>${escapeHtml(n.timestamp || "")}</span>
+      </div>
+      <div class="note-text">${escapeHtml(n.note)}</div>
+    `;
+    elements.notesList.appendChild(item);
+  });
+}
+
+// Leaderboard
+async function fetchLeaderboard() {
+  if (!elements.leaderboardBody) return;
+  try {
+    const res = await fetch("/leaderboard");
+    const data = await res.json();
+    if (data.success) {
+      renderLeaderboard(data.leaderboard);
+    }
+  } catch (err) {
+    console.error("Failed to load leaderboard:", err);
+  }
+}
+
+function renderLeaderboard(entries) {
+  if (!elements.leaderboardBody) return;
+  elements.leaderboardBody.innerHTML = "";
+  if (!entries || entries.length === 0) {
+    elements.leaderboardBody.innerHTML =
+      '<tr><td colspan="5" style="text-align: center; color: var(--text-light); padding: 12px;">No leaderboard entries recorded yet.</td></tr>';
+    return;
+  }
+
+  entries.slice(0, 10).forEach((row) => {
+    const tr = document.createElement("tr");
+    const stars = "★".repeat(row.stars || 0);
+    const statusClass = row.status === "SOLVED" ? "solved" : "failed";
+
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(row.player_name)}</strong></td>
+      <td>${escapeHtml(row.case_title || row.case_id)}</td>
+      <td style="color: var(--primary-pink); font-weight: 700;">${row.score}</td>
+      <td style="color: #e09214;">${stars || "-"}</td>
+      <td><span class="badge-status ${statusClass}">${escapeHtml(row.status)}</span></td>
+    `;
+    elements.leaderboardBody.appendChild(tr);
+  });
+}
+
 // UI Feedback helpers
 function showFeedback(text, type = "success", meta = "") {
   elements.feedbackBox.className = `feedback-box active ${type}`;
@@ -309,16 +454,26 @@ function clearFeedback() {
   elements.feedbackMeta.innerHTML = "";
 }
 
-function showAccusationStatus(message, isSuccess) {
+function showAccusationStatus(message, isSuccess, reportUrl = null) {
   elements.accusationStatus.className = `accusation-status-box active ${
     isSuccess ? "feedback-box success" : "feedback-box error"
   }`;
-  elements.accusationStatus.textContent = message;
+  let html = `<div>${escapeHtml(message)}</div>`;
+  if (reportUrl) {
+    html += `
+      <div style="margin-top: 10px;">
+        <a href="${reportUrl}" target="_blank" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; padding: 6px 12px; font-weight: 700;">
+          <span>📊 View Matplotlib Case Report Chart</span>
+        </a>
+      </div>
+    `;
+  }
+  elements.accusationStatus.innerHTML = html;
 }
 
 function clearAccusationStatus() {
   elements.accusationStatus.className = "accusation-status-box";
-  elements.accusationStatus.textContent = "";
+  elements.accusationStatus.innerHTML = "";
 }
 
 // Event Listeners
@@ -355,6 +510,30 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.resetBtn.addEventListener("click", resetCurrentCase);
   }
 
+  // Save / Load buttons
+  if (elements.saveBtn) {
+    elements.saveBtn.addEventListener("click", saveGameSession);
+  }
+  if (elements.loadBtn) {
+    elements.loadBtn.addEventListener("click", loadGameSession);
+  }
+
+  // Notes
+  if (elements.addNoteBtn) {
+    elements.addNoteBtn.addEventListener("click", addDetectiveNote);
+  }
+  if (elements.noteInput) {
+    elements.noteInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addDetectiveNote();
+    });
+  }
+
+  // Leaderboard
+  if (elements.refreshLeaderboardBtn) {
+    elements.refreshLeaderboardBtn.addEventListener("click", fetchLeaderboard);
+  }
+
   // Initial load
   loadCase("case_01");
+  fetchLeaderboard();
 });

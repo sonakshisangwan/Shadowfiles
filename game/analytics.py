@@ -1,8 +1,12 @@
-"""Analytics, Forensics Lab (pandas), CCTV Grid (numpy), and re.sub cipher utilities."""
+"""Analytics, Forensics Lab (pandas), CCTV Grid (numpy), and Matplotlib Report Generation."""
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import re
 
+import matplotlib
+matplotlib.use("Agg")  # Headless backend for web server safety
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -76,15 +80,13 @@ def create_forensics_dataset() -> pd.DataFrame:
             "Karan Saxena",
         ],
     }
-    df = pd.DataFrame(data)
-    return df
+    return pd.DataFrame(data)
 
 
 def generate_forensics_evidence_text(csv_path: Optional[Path] = None) -> str:
     """Loads or creates the forensics DataFrame and formats it into clean evidence text."""
     df = create_forensics_dataset()
-    
-    # Save to CSV in data/evidence/ if not already present
+
     evidence_dir = Path(__file__).resolve().parent.parent / "data" / "evidence"
     evidence_dir.mkdir(parents=True, exist_ok=True)
     csv_file = evidence_dir / "forensics_logs.csv"
@@ -100,18 +102,18 @@ def generate_forensics_evidence_text(csv_path: Optional[Path] = None) -> str:
         f"Action Distribution: {summary_counts}\n"
         + "=" * 72 + "\n"
     )
-    
+
     table_str = df[["timestamp", "device_id", "ip_address", "action", "status", "operator"]].to_string(index=False)
-    
+
     footer = (
         "\n" + "=" * 72 + "\n"
         "FORENSIC ANALYST NOTE:\n"
         "Only devices following the rogue pattern 'DEV-[A-Z]{3}-\\d{4}' with FLAGGED\n"
         "exfiltration status belong to the perpetrator. Ignore internal 'SYS-' nodes\n"
         "and malformed device tags like DEV-999 or DEV-TEST-01.\n"
-        f"Compromised audit logs tie rogue device activity directly to operator: Karan Saxena.\n"
+        "Compromised audit logs tie rogue device activity directly to operator: Karan Saxena.\n"
     )
-    
+
     return header + table_str + footer
 
 
@@ -121,18 +123,13 @@ def generate_forensics_evidence_text(csv_path: Optional[Path] = None) -> str:
 
 def create_cctv_matrix() -> Tuple[np.ndarray, List[str]]:
     """Creates an 8x8 NumPy matrix representing thermal surveillance sensors."""
-    # Seed for deterministic reproducible surveillance readings
     rng = np.random.default_rng(seed=42)
-    # Ambient room temperature in Celsius: 20.0C to 25.0C
     grid = rng.uniform(20.0, 25.0, size=(8, 8))
 
-    # Inject specific thermal surges (>85C) corresponding to breached locations
-    # (Row 0, Col 3) -> CAM-A4 = 92.4C
-    # (Row 1, Col 1) -> CAM-B2 = 88.7C
-    # (Row 3, Col 2) -> CAM-D3 = 94.1C
-    grid[0, 3] = 92.4
-    grid[1, 1] = 88.7
-    grid[3, 2] = 94.1
+    # Thermal surges (>85C)
+    grid[0, 3] = 92.4  # CAM-A4
+    grid[1, 1] = 88.7  # CAM-B2
+    grid[3, 2] = 94.1  # CAM-D3
 
     hot_cams = ["CAM-A4", "CAM-B2", "CAM-D3"]
     return grid, hot_cams
@@ -142,7 +139,7 @@ def generate_cctv_evidence_text() -> str:
     """Converts the NumPy CCTV matrix into formatted surveillance grid text."""
     grid, hot_cams = create_cctv_matrix()
     row_labels = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    
+
     mean_temp = float(np.mean(grid))
     max_temp = float(np.max(grid))
 
@@ -169,7 +166,7 @@ def generate_cctv_evidence_text() -> str:
         "-" * 72,
         "CCTV OPERATOR LOG:",
         "Intrusion alarm detected heat surges across 3 distinct matrix coordinates.",
-        f"Extract coordinates matching 'CAM-[A-H][1-8]' where temperature exceeds 85C.",
+        "Extract coordinates matching 'CAM-[A-H][1-8]' where temperature exceeds 85C.",
         "Facial recognition at CAM-A4 and CAM-D3 matched suspect 'Suresh Nair'.",
     ])
 
@@ -191,6 +188,130 @@ def apply_re_sub(pattern: str, replacement: str, text: str) -> str:
 
 def unmask_redactions(text: str) -> str:
     """Utility that strips redaction noise tokens from text."""
-    # Removes surrounding triple hashes e.g. ###CODE-ALPHA-42### -> CODE-ALPHA-42
-    cleaned = re.sub(r"#{3,}([^#\n]+)#{3,}", r"\1", text)
-    return cleaned
+    return re.sub(r"#{3,}([^#\n]+)#{3,}", r"\1", text)
+
+
+# ==============================================================================
+# 4. MATPLOTLIB INVESTIGATION REPORT GENERATION
+# ==============================================================================
+
+def get_reports_dir() -> Path:
+    """Returns the reports directory path, creating it if needed."""
+    reports_dir = Path(__file__).resolve().parent.parent / "data" / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    return reports_dir
+
+
+def generate_case_report_chart(
+    case_id: str,
+    case_title: str,
+    score: int,
+    stars: int,
+    precision: float,
+    recall: float,
+    correct_count: int,
+    false_count: int,
+    searches_used: int,
+    remaining_budget: int,
+    status: str = "SOLVED",
+    output_dir: Optional[Path] = None,
+) -> Tuple[Path, Dict[str, Any]]:
+    """Generates and saves a clean, visual case investigation report chart using Matplotlib."""
+    reports_dir = output_dir or get_reports_dir()
+    clean_id = str(case_id).strip().lower()
+    out_file = reports_dir / f"{clean_id}_report.png"
+
+    # Soft, cozy detective aesthetic colors
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.5, 4.4), facecolor="#fff8fa")
+    fig.patch.set_facecolor("#fff8fa")
+
+    # 1. Left Subplot: Pattern Accuracy (Precision vs Recall)
+    metrics = ["Precision", "Recall"]
+    values = [round(precision * 100, 1), round(recall * 100, 1)]
+    colors_acc = ["#d85d7f", "#489379"]
+
+    ax1.set_facecolor("#ffffff")
+    bars1 = ax1.bar(metrics, values, color=colors_acc, width=0.45, edgecolor="#f4d3df", linewidth=1.5)
+    ax1.set_ylim(0, 115)
+    ax1.set_ylabel("Accuracy Percentage (%)", fontsize=10, color="#3d2f38", fontweight="bold")
+    ax1.set_title("Warrant Accuracy", fontsize=11, color="#d85d7f", fontweight="bold", pad=10)
+    ax1.grid(axis="y", linestyle="--", alpha=0.3, color="#d85d7f")
+    ax1.tick_params(colors="#3d2f38", labelsize=9)
+
+    for spine in ax1.spines.values():
+        spine.set_color("#f4d3df")
+
+    for bar in bars1:
+        h = bar.get_height()
+        ax1.annotate(
+            f"{h:.0f}%",
+            xy=(bar.get_x() + bar.get_width() / 2, h),
+            xytext=(0, 4),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontsize=10,
+            fontweight="bold",
+            color="#3d2f38",
+        )
+
+    # 2. Right Subplot: Clues & Warrant Resources
+    categories = ["Clues Found", "Decoys Triggered", "Warrants Used", "Warrants Left"]
+    counts = [correct_count, false_count, searches_used, remaining_budget]
+    colors_res = ["#489379", "#d97757", "#d85d7f", "#bca5b2"]
+
+    ax2.set_facecolor("#ffffff")
+    bars2 = ax2.bar(categories, counts, color=colors_res, width=0.55, edgecolor="#f4d3df", linewidth=1.5)
+    max_c = max(counts) if counts and max(counts) > 0 else 4
+    ax2.set_ylim(0, max_c + 2.5)
+    ax2.set_ylabel("Count", fontsize=10, color="#3d2f38", fontweight="bold")
+    ax2.set_title("Evidence & Budget Allocation", fontsize=11, color="#d85d7f", fontweight="bold", pad=10)
+    ax2.grid(axis="y", linestyle="--", alpha=0.3, color="#d85d7f")
+    ax2.tick_params(colors="#3d2f38", labelsize=8.5)
+
+    for spine in ax2.spines.values():
+        spine.set_color("#f4d3df")
+
+    for bar in bars2:
+        h = bar.get_height()
+        ax2.annotate(
+            f"{int(h)}",
+            xy=(bar.get_x() + bar.get_width() / 2, h),
+            xytext=(0, 4),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontsize=10,
+            fontweight="bold",
+            color="#3d2f38",
+        )
+
+    # Suptitle
+    timestamp_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+    star_str = "★" * stars + "☆" * (3 - stars)
+    supt = f"INVESTIGATION REPORT: {case_title} [{status.upper()}]\nScore: {score} pts  |  Rating: {star_str}  |  {timestamp_str}"
+    fig.suptitle(supt, fontsize=12, fontweight="bold", color="#3d2f38", y=0.98)
+
+    plt.tight_layout()
+    fig.subplots_adjust(top=0.82)
+    plt.savefig(out_file, dpi=120, bbox_inches="tight", facecolor=fig.get_facecolor(), edgecolor="none")
+    plt.close(fig)
+
+    summary_data: Dict[str, Any] = {
+        "case_id": clean_id,
+        "case_title": case_title,
+        "status": status.upper(),
+        "score": int(score),
+        "stars": int(stars),
+        "precision": float(precision),
+        "recall": float(recall),
+        "correct_count": int(correct_count),
+        "false_count": int(false_count),
+        "searches_used": int(searches_used),
+        "remaining_budget": int(remaining_budget),
+        "report_filename": out_file.name,
+        "report_url": f"/reports/{out_file.name}",
+        "timestamp": timestamp_str,
+    }
+
+    return out_file, summary_data
